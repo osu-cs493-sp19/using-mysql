@@ -26,6 +26,12 @@ app.get('/lodgings', async (req, res) => {
   }
 });
 
+/*****************************************************************************
+ ** Note that the API endpoints below have not been modified to use MySQL.
+ ** They only use in-memory/JSON data.  See the course notes for this topic
+ ** for more about how to convert these endpoints to use MySQL.
+ *****************************************************************************/
+
 app.post('/lodgings', (req, res) => {
   if (validateAgainstSchema(req.body, LodgingSchema)) {
     lodgings.push(req.body);
