@@ -7,17 +7,23 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 const { validateAgainstSchema } = require('./lib/validation');
-const { LodgingSchema } = require('./models/lodging');
+const { LodgingSchema, getLodgingsPage } = require('./models/lodging');
 const lodgings = require('./lodgings');
 
 app.use(bodyParser.json());
 
 app.use(logger);
 
-app.get('/lodgings', (req, res) => {
-  res.status(200).send({
-    lodgings: lodgings
-  });
+app.get('/lodgings', async (req, res) => {
+  try {
+    const lodgingsPage = await getLodgingsPage(parseInt(req.query.page) || 1);
+    res.status(200).send(lodgingsPage);
+  } catch (err) {
+    console.error(" -- Error:", err);
+    res.status(500).send({
+      error: "Error fetching lodgings page.  Try again later."
+    });
+  }
 });
 
 app.post('/lodgings', (req, res) => {
